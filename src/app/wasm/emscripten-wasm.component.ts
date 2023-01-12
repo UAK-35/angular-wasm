@@ -28,19 +28,20 @@ export abstract class EmscriptenWasmComponent<M extends EmscriptenModule = Emscr
       : "";
     loadScript(this.moduleExportName, `${environment.wasmAssetsPath}/${this.wasmJavaScriptLoader}${jsVersion}`)
       .then(() => {
-        const module = <M>{
+        const moduleObj = <M>{
           locateFile: (file: string) => {
             const fileVersion = wasmCacheBusting[file] ? `?v=${wasmCacheBusting[file]}` : "";
+            console.log('file', file, 'fileVersion', fileVersion);
             return `${environment.wasmAssetsPath}/${file}${fileVersion}`;
           },
         };
         const moduleDecorator: EmscriptenModuleDecorator<M> = this.moduleDecorator || noopModuleDecorator;
-        moduleDecorator(module);
+        moduleDecorator(moduleObj);
 
-        return window[this.moduleExportName](module);
+        return window[this.moduleExportName](moduleObj);
       })
       .then((mod) => {
-        this.resolvedModule = mod;
+        this.resolvedModule = mod as M;
       });
   }
 }
