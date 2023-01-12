@@ -6,7 +6,9 @@
   "scripts": {
     "ng": "ng",
     "build": "npm run wasm && ng build --configuration production",
-    "wasm": "node scripts/compile-wasm.js && node scripts/wasm-cache-busting.js",
+    "wasm-old": "node scripts/compile-wasm.js && node scripts/wasm-cache-busting.js",
+    "wasm-build": "bash -c 'source /media/mgr/EDATA/CLionProjects/emsdk/emsdk_env.sh && echo \"EMSDK value: $EMSDK\" && node scripts/compile-wasm.js'",
+    "wasm": "npm run wasm-build && node scripts/wasm-cache-busting.js",
     "start": "ng serve",
     "lint": "ng lint",
     "prettier:check": "prettier --check .",
